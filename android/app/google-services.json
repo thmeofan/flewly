@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "912354512606",
+    "project_id": "flewly",
+    "storage_bucket": "flewly.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:912354512606:android:ebdb763689888bdbeabc4f",
+        "android_client_info": {
+          "package_name": "com.flewly.utix.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlQLhjJmD61teyzyvcq2tl9SS4w_aG9so"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
