@@ -1,3 +1,4 @@
+import 'package:flewly/views/settings/widgets/ios_toggle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../consts/app_colors.dart';
@@ -16,7 +17,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-
+  bool isSwitched = false;
   @override
   void dispose() {
     _nameController.dispose();
@@ -113,22 +114,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 height: size.height * 0.01,
               ),
               SettingsTile(
-                text: 'Terms of use',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          const MyScreenForVIew(url: 'https://google.com/'),
-                    ),
-                  );
-                },
-                assetName: 'assets/icons/terms.svg',
-              ),
-              SizedBox(
-                height: size.height * 0.01,
-              ),
-              SettingsTile(
                   text: 'Privacy Policy',
                   onTap: () {
                     Navigator.push(
@@ -154,7 +139,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                     );
                   },
-                  assetName: 'assets/icons/support.svg'),
+                  action: IOSStyleToggle(
+                    value: isSwitched,
+                    onChanged: (value) {
+                      setState(() {
+                        isSwitched = value;
+                      });
+                    },
+                  ),
+                  assetName: 'assets/icons/notification.svg'),
               SizedBox(
                 height: size.height * 0.01,
               ),
