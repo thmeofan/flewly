@@ -13,7 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'flight_screen.dart';
 
 class TransportInfoScreen extends StatelessWidget {
-  final Rental rental;
+  final FlightModel rental;
 
   const TransportInfoScreen({
     Key? key,
@@ -36,14 +36,14 @@ class TransportInfoScreen extends StatelessWidget {
             color: AppColors.blueColor,
           ),
         ),
-        backgroundColor: AppColors.brownColor,
+        backgroundColor: AppColors.greyColor,
         title: const Text(
           'Back',
           style: SettingsTextStyle.back,
         ),
       ),
       body: Container(
-        color: AppColors.brownColor,
+        color: AppColors.greyColor,
         width: double.infinity,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -58,7 +58,7 @@ class TransportInfoScreen extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color: AppColors.lightBrownColor,
+                  color: AppColors.lightGreyColor,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(6.0),
@@ -69,19 +69,19 @@ class TransportInfoScreen extends StatelessWidget {
                         leading: SvgPicture.asset('assets/icons/type.svg'),
                         actions: [
                           Text(
-                            rental.type,
+                            rental.comment,
                             style: HomeScreenTextStyle.info,
                           )
                         ],
                       ),
                       SizedBox(height: size.height * 0.005),
                       OutputWidget(
-                        text: 'Rental cost',
+                        text: 'FlightModel cost',
                         leading:
                             SvgPicture.asset('assets/icons/rental_cost.svg'),
                         actions: [
                           Text(
-                            '${rental.cost.toStringAsFixed(2)}',
+                            '${rental.travelBudget.toStringAsFixed(2)}',
                             style: HomeScreenTextStyle.info,
                           )
                         ],
@@ -93,7 +93,7 @@ class TransportInfoScreen extends StatelessWidget {
                             SvgPicture.asset('assets/icons/payment_type.svg'),
                         actions: [
                           Text(
-                            '${rental.rentalPeriod.name}',
+                            '${rental.destination}',
                             style: HomeScreenTextStyle.info,
                           )
                         ],
@@ -106,7 +106,7 @@ class TransportInfoScreen extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color: AppColors.lightBrownColor,
+                  color: AppColors.lightGreyColor,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(6.0),
@@ -119,18 +119,18 @@ class TransportInfoScreen extends StatelessWidget {
                           Wrap(
                             spacing: 8,
                             children: [
-                              Container(
-                                padding: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: AppColors.brownColor,
-                                ),
-                                child: Text(
-                                  rental.state.name,
-                                  style: _getTextStyleBasedOnRentalState(
-                                      rental.state.name),
-                                ),
-                              ),
+                              // Container(
+                              //   padding: EdgeInsets.all(8),
+                              //   decoration: BoxDecoration(
+                              //     borderRadius: BorderRadius.circular(10),
+                              //     color: AppColors.greyColor,
+                              //   ),
+                              //   child: Text(
+                              //     rental.state.name,
+                              //     style: _getTextStyleBasedOnRentalState(
+                              //         rental.state.name),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ],
@@ -141,7 +141,7 @@ class TransportInfoScreen extends StatelessWidget {
                         leading: SvgPicture.asset('assets/icons/who_rents.svg'),
                         actions: [
                           Text(
-                            ' ${rental.owner}',
+                            ' ${rental.flightNumber}',
                             style: HomeScreenTextStyle.info,
                           )
                         ],
@@ -165,7 +165,7 @@ class TransportInfoScreen extends StatelessWidget {
                     padding: EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: AppColors.lightBrownColor,
+                      color: AppColors.lightGreyColor,
                     ),
                     child: Text(
                       rental.comment,
@@ -178,7 +178,7 @@ class TransportInfoScreen extends StatelessWidget {
               ChosenActionButton(
                   text: 'Delete rental',
                   onTap: () {
-                    context.read<RentalCubit>().deleteRental(rental);
+                    context.read<FlightModelCubit>().deleteFlightModel(rental);
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -193,7 +193,7 @@ class TransportInfoScreen extends StatelessWidget {
     );
   }
 
-  TextStyle _getTextStyleBasedOnRentalState(String rentalState) {
+  TextStyle _getTextStyleBasedOnFlightModelState(String rentalState) {
     switch (rentalState.toLowerCase()) {
       case 'perfect':
         return HomeScreenTextStyle.typePerfect;

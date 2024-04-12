@@ -26,73 +26,52 @@ class ArticleScreen extends StatelessWidget {
             color: AppColors.blueColor,
           ),
         ),
-        backgroundColor: AppColors.brownColor,
+        backgroundColor: AppColors.greyColor,
         title: const Text(
           'Back',
           style: SettingsTextStyle.back,
         ),
       ),
       body: Container(
-        color: AppColors.brownColor,
+        color: AppColors.greyColor,
         child: Column(
           children: [
             SizedBox(
               height: screenSize.height * 0.3,
-              width: screenSize.width * 0.9,
+              width: screenSize.width * 0.95,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
+                borderRadius: BorderRadius.circular(5.0),
                 child: FancyShimmerImage(
                   boxFit: BoxFit.cover,
                   imageUrl: newsModel.imageUrl,
                 ),
               ),
             ),
-            SizedBox(
-              height: screenSize.height * 0.01,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                SizedBox(
-                  width: screenSize.width * 0.05,
-                ),
-                Wrap(
-                  spacing: 6,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: AppColors.lightBrownColor,
-                      ),
-                      child: Text(
-                        newsModel.date,
-                        style: NewsTextStyle.date,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  width: screenSize.width * 0.025,
-                ),
-              ],
-            ),
             Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: screenSize.width * 0.025,
                   vertical: screenSize.width * 0.02),
               child: Text(
-                newsModel.title,
+                newsModel.title.toUpperCase(),
                 style: NewsTextStyle.articleTitle,
-                textAlign: TextAlign.start,
+                textAlign: TextAlign.center,
               ),
             ),
             Expanded(
               child: SingleChildScrollView(
                 padding: EdgeInsets.all(screenSize.width * 0.025),
-                child: Text(
-                  newsModel.text,
-                  style: NewsTextStyle.articleText,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: AppColors.lightGreyColor,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      newsModel.text,
+                      style: NewsTextStyle.articleText,
+                    ),
+                  ),
                 ),
               ),
             ),

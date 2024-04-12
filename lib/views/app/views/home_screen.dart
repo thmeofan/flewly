@@ -1,3 +1,4 @@
+import 'package:flewly/consts/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../data/model/news_model.dart';
@@ -31,16 +32,16 @@ class _HomeScreenState extends State<HomeScreen> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
-              height: size.height * 0.04,
+              height: size.height * 0.025,
               currentIndex == 0
-                  ? 'assets/icons/cars_blue.svg'
-                  : 'assets/icons/cars.svg',
+                  ? 'assets/icons/home_blue.svg'
+                  : 'assets/icons/home.svg',
             ),
             label: 'cars',
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
-              height: size.height * 0.04,
+              height: size.height * 0.025,
               currentIndex == 1
                   ? 'assets/icons/news_blue.svg'
                   : 'assets/icons/news.svg',
@@ -49,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           BottomNavigationBarItem(
               icon: SvgPicture.asset(
-                height: size.height * 0.04,
+                height: size.height * 0.025,
                 currentIndex == 2
                     ? 'assets/icons/settings_blue.svg'
                     : 'assets/icons/settings.svg',
@@ -61,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
             currentIndex = index;
           });
         },
+        backgroundColor: AppColors.greyColor,
         type: BottomNavigationBarType.fixed,
         unselectedItemColor: Colors.white,
         showSelectedLabels: false,

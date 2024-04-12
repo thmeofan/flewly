@@ -13,40 +13,38 @@ class NewsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            color: AppColors.greenColor,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: SvgPicture.asset(
-              'assets/icons/back.svg',
-              color: AppColors.blueColor,
-            ),
-          ),
-          backgroundColor: AppColors.brownColor,
-          title: const Text(
-            'Back',
-            style: SettingsTextStyle.back,
-          ),
+          automaticallyImplyLeading: false,
+          backgroundColor: AppColors.greyColor,
         ),
         body: Container(
-          color: AppColors.brownColor,
-          child: Column(children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: newsModel.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return NewsWidget(newsModel: newsModel[index]);
-                },
+          color: AppColors.greyColor,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(
+                'NEWS',
+                style: SettingsTextStyle.title,
               ),
-            ),
-            SizedBox(
-              height: screenSize.height * 0.01,
-            ),
-          ]),
+              SizedBox(
+                height: size.height * 0.01,
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: newsModel.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return NewsWidget(newsModel: newsModel[index]);
+                  },
+                ),
+              ),
+              SizedBox(
+                height: screenSize.height * 0.01,
+              ),
+            ]),
+          ),
         ));
   }
 }

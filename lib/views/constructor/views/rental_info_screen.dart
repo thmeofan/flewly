@@ -4,34 +4,35 @@ import '../../../blocs/rental_cubit/rental_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../consts/app_colors.dart';
 import '../../../consts/app_text_styles/constructor_text_style.dart';
+import '../../../consts/app_text_styles/onboarding_text_style.dart';
 import '../../../consts/app_text_styles/settings_text_style.dart';
 import '../../../data/model/rental.dart';
 import '../../app/widgets/chosen_action_button_widget.dart';
 import '../../app/widgets/input_widget.dart';
 import 'comments_screen.dart';
 
-class RentalInfoScreen extends StatefulWidget {
+class FlightModelInfoScreen extends StatefulWidget {
   @override
-  _RentalInfoScreenState createState() => _RentalInfoScreenState();
+  _FlightModelInfoScreenState createState() => _FlightModelInfoScreenState();
 }
 
-class _RentalInfoScreenState extends State<RentalInfoScreen> {
-  final _typeController = TextEditingController();
-  final _costController = TextEditingController();
-  final _ownerController = TextEditingController();
-  RentalPeriod _rentalPeriod = RentalPeriod.monthly;
+class _FlightModelInfoScreenState extends State<FlightModelInfoScreen> {
+  final _dateController = TextEditingController();
+  final _destinationController = TextEditingController();
+  final _flightNumberController = TextEditingController();
+  FlightType _selectedFlightType = FlightType.vacation;
 
   void _clearControllers() {
-    _typeController.clear();
-    _costController.clear();
-    _ownerController.clear();
+    _dateController.clear();
+    _destinationController.clear();
+    _flightNumberController.clear();
   }
 
   @override
   void dispose() {
-    _typeController.dispose();
-    _costController.dispose();
-    _ownerController.dispose();
+    _dateController.dispose();
+    _destinationController.dispose();
+    _flightNumberController.dispose();
     super.dispose();
   }
 
@@ -51,14 +52,14 @@ class _RentalInfoScreenState extends State<RentalInfoScreen> {
             color: AppColors.blueColor,
           ),
         ),
-        backgroundColor: AppColors.brownColor,
+        backgroundColor: AppColors.greyColor,
         title: const Text(
           'Back',
           style: SettingsTextStyle.back,
         ),
       ),
       body: Container(
-        color: AppColors.brownColor,
+        color: AppColors.greyColor,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3.0),
           child: SingleChildScrollView(
@@ -66,63 +67,58 @@ class _RentalInfoScreenState extends State<RentalInfoScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'New transport',
+                  'New flight'.toUpperCase(),
                   style: SettingsTextStyle.title,
                 ),
-                SizedBox(height: size.height * 0.01),
-                Text(
-                  'Type of water transport',
-                  style: ConstructorTextStyle.lable,
-                ),
                 SizedBox(height: size.height * 0.005),
                 InputWidget(
-                  controller: _typeController,
+                  svgAsset: 'assets/icons/when.svg',
+                  controller: _dateController,
+                  label: 'When',
                 ),
                 SizedBox(height: size.height * 0.015),
-                Text(
-                  'Rental cost',
-                  style: ConstructorTextStyle.lable,
-                ),
-                SizedBox(height: size.height * 0.005),
                 InputWidget(
-                  controller: _costController,
+                  svgAsset: 'assets/icons/where.svg',
+                  controller: _destinationController,
+                  label: 'Where',
+                ),
+                SizedBox(height: size.height * 0.015),
+                InputWidget(
+                  svgAsset: 'assets/icons/number.svg',
+                  controller: _flightNumberController,
                   keyboardType: TextInputType.number,
-                ),
-                SizedBox(height: size.height * 0.015),
-                Text(
-                  'Who rents from you?',
-                  style: ConstructorTextStyle.lable,
-                ),
-                SizedBox(height: size.height * 0.005),
-                InputWidget(
-                  controller: _ownerController,
+                  label: 'Flight number',
                 ),
                 SizedBox(height: size.height * 0.015),
                 _buildRentalPeriodButtons(),
                 SizedBox(height: size.height * 0.015),
                 ChosenActionButton(
                   text: 'Next',
-                  backgroundColor: _typeController.text.isEmpty &&
-                          _costController.text.isEmpty &&
-                          _ownerController.text.isEmpty
+                  backgroundColor: _dateController.text.isEmpty ||
+                          _destinationController.text.isEmpty ||
+                          _flightNumberController.text.isEmpty
                       ? AppColors.blueColor.withOpacity(0.25)
                       : AppColors.blueColor,
                   onTap: () {
-                    if (_typeController.text.isNotEmpty &&
-                        _costController.text.isNotEmpty &&
-                        _ownerController.text.isNotEmpty) {
-                      final newRentalType = Rental(
-                        type: _typeController.text,
-                        cost: double.parse(_costController.text),
-                        owner: _ownerController.text,
-                        rentalPeriod: _rentalPeriod,
+                    if (_dateController.text.isNotEmpty &&
+                        _destinationController.text.isNotEmpty &&
+                        _flightNumberController.text.isNotEmpty) {
+                      final newFlight = FlightModel(
+                        date: _dateController.text,
+                        flightNumber:
+                            double.parse(_flightNumberController.text),
+                        destination: _destinationController.text,
+                        flightType: _selectedFlightType,
                       );
-                      context.read<RentalCubit>().addRental(newRentalType);
+                      context
+                          .read<FlightModelCubit>()
+                          .addFlightModel(newFlight);
                       _clearControllers();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CommentsScreen()),
+                          builder: (context) => CommentsScreen(),
+                        ),
                       );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -159,13 +155,13 @@ class _RentalInfoScreenState extends State<RentalInfoScreen> {
         Row(
           children: [
             Expanded(
-              child: _buildRentalPeriodButton(RentalPeriod.weekly),
+              child: _buildPeriodOption('Vacation', FlightType.vacation),
             ),
             Expanded(
-              child: _buildRentalPeriodButton(RentalPeriod.monthly),
+              child: _buildPeriodOption('Work', FlightType.work),
             ),
             Expanded(
-              child: _buildRentalPeriodButton(RentalPeriod.annually),
+              child: _buildPeriodOption('Other', FlightType.other),
             ),
           ],
         ),
@@ -173,51 +169,44 @@ class _RentalInfoScreenState extends State<RentalInfoScreen> {
     );
   }
 
-  Widget _buildRentalPeriodButton(RentalPeriod rentalPeriod) {
-    final isSelected = _rentalPeriod == rentalPeriod;
+  Widget _buildPeriodOption(String title, FlightType flightType) {
     final size = MediaQuery.of(context).size;
-    return SizedBox(
-      height: size.height * 0.08,
-      child: Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: InkWell(
-          onTap: () {
-            setState(() {
-              _rentalPeriod = rentalPeriod;
-            });
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.lightBrownColor,
-              border: Border.all(
-                color: isSelected ? AppColors.blueColor : Colors.transparent,
-                width: 2.0,
-              ),
-              borderRadius: BorderRadius.circular(
-                8.0,
-              ),
+    final isSelected = flightType == _selectedFlightType;
+
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: InkWell(
+        onTap: () {
+          setState(() {
+            _selectedFlightType = flightType;
+          });
+        },
+        child: Container(
+          height: size.height * 0.075,
+          width: size.width * 0.295,
+          decoration: BoxDecoration(
+            color: AppColors.lightGreyColor,
+            border: Border.all(
+              color: isSelected ? AppColors.blueColor : Colors.transparent,
+              width: 2.0,
             ),
-            padding: EdgeInsets.all(4.0),
-            child: Row(
-              children: [
-                SizedBox(width: size.width * 0.005),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      rentalPeriod.name,
-                      style: TextStyle(
-                        color: isSelected ? Colors.white : Colors.white,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    SizedBox(height: size.width * 0.01),
-                  ],
-                ),
-                SizedBox(width: size.width * 0.005),
-              ],
-            ),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          padding: EdgeInsets.all(2.0),
+          child: Row(
+            children: [
+              SizedBox(width: size.width * 0.025),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    title.toUpperCase(),
+                    style: OnboardingTextStyle.description,
+                  ),
+                  SizedBox(height: size.width * 0.01),
+                ],
+              ),
+            ],
           ),
         ),
       ),

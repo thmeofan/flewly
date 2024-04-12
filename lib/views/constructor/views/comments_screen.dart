@@ -16,14 +16,18 @@ class CommentsScreen extends StatefulWidget {
 }
 
 class _CommentsScreenState extends State<CommentsScreen> {
+  final _budgetController = TextEditingController();
   final _commentController = TextEditingController();
-  RentalState _rentalState = RentalState.average;
+  // RentalState _rentalState = RentalState.average;
+
   void _clearControllers() {
+    _budgetController.clear();
     _commentController.clear();
   }
 
   @override
   void dispose() {
+    _budgetController.dispose();
     _commentController.dispose();
     super.dispose();
   }
@@ -43,14 +47,14 @@ class _CommentsScreenState extends State<CommentsScreen> {
             color: AppColors.blueColor,
           ),
         ),
-        backgroundColor: AppColors.brownColor,
+        backgroundColor: AppColors.greyColor,
         title: const Text(
           'Back',
           style: SettingsTextStyle.back,
         ),
       ),
       body: Container(
-        color: AppColors.brownColor,
+        color: AppColors.greyColor,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 3.0),
           child: SingleChildScrollView(
@@ -58,29 +62,21 @@ class _CommentsScreenState extends State<CommentsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'New transport',
+                  'New flight'.toUpperCase(),
                   style: SettingsTextStyle.title,
                 ),
                 SizedBox(height: size.height * 0.01),
-                Text(
-                  'Write a comment about water transport',
-                  style: ConstructorTextStyle.lable,
+                InputWidget(
+                  svgAsset: 'assets/icons/budget.svg',
+                  controller: _budgetController,
+                  keyboardType: TextInputType.number,
+                  label: 'Travel budget',
                 ),
                 SizedBox(height: size.height * 0.005),
                 InputWidget(
+                  svgAsset: 'assets/icons/comment.svg',
                   controller: _commentController,
-                ),
-                const SizedBox(height: 16.0),
-                _buildRentalStateButtons(
-                  title: 'Rental State:',
-                  options:
-                      RentalState.values.map((state) => state.name).toList(),
-                  onOptionSelected: (selectedState) {
-                    setState(() {
-                      _rentalState = RentalState.values.byName(selectedState);
-                    });
-                  },
-                  selectedOption: _rentalState.name,
+                  label: 'Comment',
                 ),
                 SizedBox(
                   height: size.height * 0.015,
@@ -91,45 +87,32 @@ class _CommentsScreenState extends State<CommentsScreen> {
                       ? AppColors.blueColor.withOpacity(0.25)
                       : AppColors.blueColor,
                   onTap: () {
-                    if (_commentController.text.isNotEmpty) {
+                    if (_commentController.text.isNotEmpty &&
+                        _budgetController.text.isNotEmpty) {
+                      final FlightModel updatedFlightModel = FlightModel(
+                        comment: _commentController.text,
+                        travelBudget: double.parse(_budgetController.text),
+                      );
+
                       final rentalCubitState =
-                          context.read<RentalCubit>().state;
+                          context.read<FlightModelCubit>().state;
+                      final lastIndex = rentalCubitState.length - 1;
 
-                      if (rentalCubitState.isNotEmpty) {
-                        final updatedRental = rentalCubitState.last.copyWith(
-                          comment: _commentController.text,
-                          state: _rentalState,
-                        );
-
-                        context.read<RentalCubit>().updateRentedBoatList([
-                          ...rentalCubitState.sublist(
-                              0, rentalCubitState.length - 1),
-                          updatedRental,
-                        ]);
-
-                        _clearControllers();
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => HomeScreen(),
-                          ),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'No rentals found. Please add a rental before continuing.',
-                              style: ConstructorTextStyle.snackBar,
-                            ),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
-                      }
+                      context
+                          .read<FlightModelCubit>()
+                          .updateRentedBoatList(lastIndex, updatedFlightModel);
+                      _clearControllers();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomeScreen(),
+                        ),
+                      );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            'Please enter a comment before continuing.',
+                            'Please enter a comment and travel budget before continuing.',
                             style: ConstructorTextStyle.snackBar,
                           ),
                           duration: Duration(seconds: 2),
@@ -139,106 +122,13 @@ class _CommentsScreenState extends State<CommentsScreen> {
                   },
                 ),
                 SizedBox(
-                  height: size.height * 0.3,
+                  height: size.height * 0.6,
                 ),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildRentalStateButtons({
-    required String title,
-    required List<String> options,
-    required Function(String) onOptionSelected,
-    String? selectedOption,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: ConstructorTextStyle.lable,
-        ),
-        const SizedBox(height: 8.0),
-        Column(
-          children: options.map((option) {
-            final isSelected = selectedOption == option;
-            final size = MediaQuery.of(context).size;
-            Color circleColor = AppColors.greenColor;
-
-            switch (option) {
-              case 'perfect':
-                circleColor = AppColors.greenColor;
-                break;
-              case 'average':
-                circleColor = AppColors.orangeColor;
-                break;
-              case 'bad':
-                circleColor = AppColors.redColor;
-                break;
-              default:
-                circleColor = AppColors.greenColor;
-                break;
-            }
-
-            return SizedBox(
-              height: size.height * 0.08,
-              child: Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: InkWell(
-                  onTap: () {
-                    onOptionSelected(option);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.lightBrownColor,
-                      border: Border.all(
-                        color: isSelected
-                            ? AppColors.blueColor
-                            : Colors.transparent,
-                        width: 2.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    padding: EdgeInsets.all(4.0),
-                    child: Row(
-                      children: [
-                        SizedBox(width: size.width * 0.005),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              option,
-                              style: TextStyle(
-                                color: isSelected ? Colors.white : Colors.white,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            SizedBox(height: size.width * 0.01),
-                          ],
-                        ),
-                        Spacer(),
-                        Container(
-                          width: 24,
-                          height: 24,
-                          decoration: BoxDecoration(
-                            color: circleColor,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        SizedBox(width: size.width * 0.005),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
     );
   }
 }

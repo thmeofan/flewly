@@ -20,6 +20,7 @@ class StartScreen extends StatefulWidget {
 class _StartScreenState extends State<StartScreen> {
   List<bool> _isSelected = [true, false, false, false];
   final _nameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -33,17 +34,17 @@ class _StartScreenState extends State<StartScreen> {
           },
           icon: SvgPicture.asset(
             'assets/icons/back.svg',
-            color: AppColors.blueColor,
+            //    color: AppColors.blueColor,
           ),
         ),
-        backgroundColor: AppColors.brownColor,
+        backgroundColor: AppColors.greyColor,
         title: const Text(
           'Back',
           style: SettingsTextStyle.back,
         ),
       ),
       body: Container(
-        color: AppColors.brownColor,
+        color: AppColors.greyColor,
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.all(size.height * 0.02),
@@ -54,27 +55,21 @@ class _StartScreenState extends State<StartScreen> {
                   height: size.height * 0.1,
                 ),
                 Text(
-                  'Let\'s start',
+                  'Let\'s get acquainted',
                   style: SettingsTextStyle.title,
-                ),
-                SizedBox(
-                  height: size.height * 0.01,
-                ),
-                Text(
-                  'Which water transport you rent out?',
-                  style: ConstructorTextStyle.lable,
                 ),
                 SizedBox(
                   height: size.height * 0.01,
                 ),
                 InputWidget(
                   controller: _nameController,
+                  label: 'Your name',
                 ),
                 SizedBox(
-                  height: size.height * 0.01,
+                  height: size.height * 0.015,
                 ),
                 Text(
-                  'How many of them?',
+                  'How often do you fly?',
                   style: ConstructorTextStyle.lable,
                 ),
                 SizedBox(
@@ -82,11 +77,14 @@ class _StartScreenState extends State<StartScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 2.0),
-                  child: Column(
+                  child: Row(
                     children: [
-                      _buildPeriodOption("1-3", 0),
-                      _buildPeriodOption("4-7", 1),
-                      _buildPeriodOption("More than 7", 2),
+                      _buildPeriodOption(
+                          "1-2", circleColor: AppColors.greenColor, 0),
+                      _buildPeriodOption(
+                          "3-5", circleColor: AppColors.orangeColor, 1),
+                      _buildPeriodOption(
+                          ">5", circleColor: AppColors.redColor, 2),
                     ],
                   ),
                 ),
@@ -110,7 +108,7 @@ class _StartScreenState extends State<StartScreen> {
                       : AppColors.blueColor,
                 ),
                 SizedBox(
-                  height: size.height * 0.27,
+                  height: size.height * 0.5,
                 ),
               ],
             ),
@@ -120,7 +118,8 @@ class _StartScreenState extends State<StartScreen> {
     );
   }
 
-  Widget _buildPeriodOption(String title, int index) {
+  Widget _buildPeriodOption(String title, int index,
+      {Color circleColor = Colors.blue}) {
     final size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.all(2.0),
@@ -134,8 +133,9 @@ class _StartScreenState extends State<StartScreen> {
         },
         child: Container(
           height: size.height * 0.075,
+          width: size.width * 0.295,
           decoration: BoxDecoration(
-            color: AppColors.lightBrownColor,
+            color: AppColors.lightGreyColor,
             border: Border.all(
               color:
                   _isSelected[index] ? AppColors.blueColor : Colors.transparent,
@@ -149,7 +149,19 @@ class _StartScreenState extends State<StartScreen> {
           child: Row(
             children: [
               SizedBox(
-                width: size.width * 0.005,
+                width: size.width * 0.01,
+              ),
+              Container(
+                width: size.width * 0.045,
+                height: size.width * 0.045,
+                decoration: BoxDecoration(
+                  color: circleColor,
+                  shape: BoxShape.circle,
+                ),
+                margin: EdgeInsets.only(right: size.width * 0.015),
+              ),
+              SizedBox(
+                width: size.width * 0.025,
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,

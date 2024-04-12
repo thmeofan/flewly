@@ -31,24 +31,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        leading: IconButton(
-          color: AppColors.greenColor,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: SvgPicture.asset(
-            'assets/icons/back.svg',
-            color: AppColors.blueColor,
-          ),
-        ),
-        backgroundColor: AppColors.brownColor,
-        title: const Text(
-          'Back',
-          style: SettingsTextStyle.back,
-        ),
+        automaticallyImplyLeading: false,
+        backgroundColor: AppColors.greyColor,
       ),
       body: Container(
-        color: AppColors.brownColor,
+        color: AppColors.greyColor,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
           child: Column(
@@ -58,7 +45,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 height: size.height * 0.1,
               ),
               Text(
-                'Settings',
+                'SETTINGS',
                 style: SettingsTextStyle.title,
               ),
               SizedBox(
@@ -67,13 +54,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Container(
                 width: size.width * 0.95,
                 decoration: BoxDecoration(
-                  color: AppColors.lightBrownColor,
-                  borderRadius: BorderRadius.circular(15.0),
+                  color: AppColors.lightGreyColor,
+                  borderRadius: BorderRadius.circular(5.0),
                 ),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      SvgPicture.asset('assets/images/settings.svg'),
                       SizedBox(
                         height: size.height * 0.005,
                       ),
@@ -88,6 +74,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         'We need your feedback to get better',
                         style: SettingsTextStyle.bannerSubTitle,
                       ),
+                      SizedBox(
+                        height: size.height * 0.005,
+                      ),
+                      SvgPicture.asset('assets/images/settings.svg'),
                       SizedBox(
                         height: size.height * 0.005,
                       ),
@@ -129,7 +119,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 height: size.height * 0.01,
               ),
               SettingsTile(
-                  text: 'Support page',
+                  text: 'Notification',
                   onTap: () {
                     Navigator.push(
                       context,

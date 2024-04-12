@@ -2,31 +2,33 @@ import '../../data/model/rental.dart';
 import '../../util/shared_pref_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RentalCubit extends Cubit<List<Rental>> {
+class FlightModelCubit extends Cubit<List<FlightModel>> {
   final SharedPreferencesService _sharedPreferencesService;
 
-  RentalCubit(this._sharedPreferencesService) : super([]) {
-    _loadrentedBoat();
-  }
+  FlightModelCubit(this._sharedPreferencesService) : super([]);
 
-  void _loadrentedBoat() async {
+  void _loadRentedBoat() async {
     final rentedBoat = await _sharedPreferencesService.getRentedBoat();
     emit(rentedBoat);
   }
 
-  void addRental(Rental rentalBoat) async {
-    final List<Rental> updatedList = List.from(state)..add(rentalBoat);
+  void addFlightModel(FlightModel newFlight) async {
+    final List<FlightModel> updatedList = List.from(state)..add(newFlight);
     emit(updatedList);
     await _sharedPreferencesService.saveRentedBoat(updatedList);
   }
 
-  void updateRentedBoatList(List<Rental> updatedList) async {
-    emit(updatedList);
-    await _sharedPreferencesService.saveRentedBoat(updatedList);
+  void updateRentedBoatList(int index, FlightModel updatedFlightModel) async {
+    final List<FlightModel> currentList = List.from(state);
+    if (index >= 0 && index < currentList.length) {
+      currentList[index] = updatedFlightModel;
+      emit(currentList);
+      await _sharedPreferencesService.saveRentedBoat(currentList);
+    }
   }
 
-  void deleteRental(Rental rental) async {
-    final List<Rental> updatedList = List.from(state)..remove(rental);
+  void deleteFlightModel(FlightModel rental) async {
+    final List<FlightModel> updatedList = List.from(state)..remove(rental);
     emit(updatedList);
     await _sharedPreferencesService.saveRentedBoat(updatedList);
   }

@@ -33,7 +33,7 @@ class ChosenActionButton extends StatelessWidget {
             backgroundColor: backgroundColor,
             padding: const EdgeInsets.symmetric(vertical: 5),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(4),
             ),
           ),
           child: Text(

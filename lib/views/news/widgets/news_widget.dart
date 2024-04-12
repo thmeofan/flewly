@@ -14,7 +14,7 @@ class NewsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: GestureDetector(
         onTap: () {
           Navigator.of(context)
@@ -25,8 +25,8 @@ class NewsWidget extends StatelessWidget {
           width: screenSize.width * 0.98,
           padding: EdgeInsets.symmetric(vertical: screenSize.width * 0.01),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.0),
-            color: AppColors.lightBrownColor,
+            borderRadius: BorderRadius.circular(5.0),
+            color: AppColors.lightGreyColor,
           ),
           child: Row(
             children: [
@@ -38,7 +38,7 @@ class NewsWidget extends StatelessWidget {
                   left: screenSize.width * 0.01,
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15.0),
+                  borderRadius: BorderRadius.circular(5.0),
                   child: FancyShimmerImage(
                     width: screenSize.width * 0.35,
                     height: screenSize.width * 0.35,
@@ -59,33 +59,19 @@ class NewsWidget extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Spacer(),
-                          Wrap(
-                            spacing: 6,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: AppColors.brownColor,
-                                ),
-                                child: Text(
-                                  newsModel.date,
-                                  style: NewsTextStyle.date,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                      Text(
+                        newsModel.title,
+                        style: NewsTextStyle.title,
+                        maxLines: 2,
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(
                         height: screenSize.height * 0.005,
                       ),
                       Text(
-                        newsModel.title,
-                        style: NewsTextStyle.title,
+                        newsModel.text,
+                        style: NewsTextStyle.preview,
                         maxLines: 3,
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,

@@ -1,3 +1,4 @@
+import 'package:flewly/views/flight/widgets/flight_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -6,6 +7,7 @@ import '../../../blocs/rental_cubit/rental_cubit.dart';
 import '../../../consts/app_colors.dart';
 import '../../../consts/app_text_styles/constructor_text_style.dart';
 import '../../../consts/app_text_styles/home_screen_text_style.dart';
+import '../../../consts/app_text_styles/settings_text_style.dart';
 import '../../../data/model/news_model.dart';
 import '../../../data/model/rental.dart';
 import '../../../util/app_routes.dart';
@@ -19,43 +21,47 @@ class FlightScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.brownColor,
-        leadingWidth: size.width * 0.3,
-        leading: TextButton(
-          onPressed: () {
-            Navigator.of(context).pushNamed(AppRoutes.profile);
-          },
-          child: const Text('Settings', style: HomeScreenTextStyle.appbar),
+        appBar: AppBar(
+          backgroundColor: AppColors.greyColor,
+          automaticallyImplyLeading: false,
         ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(AppRoutes.news, arguments: news);
-            },
-            child: const Text('News', style: HomeScreenTextStyle.appbar),
-          ),
-        ],
-      ),
-      body: BlocBuilder<RentalCubit, List<Rental>>(
-        builder: (context, rentalList) {
-          if (rentalList.isEmpty) {
-            return _buildEmptyState(context);
-          }
-          return buildRentalsList(context, rentalList);
-        },
-      ),
-    );
+        body: BlocBuilder<FlightModelCubit, List<FlightModel>>(
+          builder: (context, rentalList) {
+            if (rentalList.isEmpty) {
+              return _buildEmptyState(context);
+            }
+            return buildFlightModelsList(context, rentalList);
+          },
+        ),
+        floatingActionButton: IconButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => FlightModelInfoScreen()),
+            );
+          },
+          icon: SvgPicture.asset('assets/icons/plus.svg'),
+        ));
   }
 
   Widget _buildEmptyState(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Container(
-      color: AppColors.brownColor,
+      color: AppColors.greyColor,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(width: size.width * 0.03),
+                Text(
+                  'FLIGHTS',
+                  style: SettingsTextStyle.title,
+                ),
+              ],
+            ),
             SizedBox(
               height: size.height * 0.03,
             ),
@@ -68,26 +74,26 @@ class FlightScreen extends StatelessWidget {
               height: size.height * 0.02,
             ),
             Text(
-              'There\'s no info',
+              'There\'s no info'.toUpperCase(),
               style: HomeScreenTextStyle.emptyTitle,
             ),
             SizedBox(
               height: size.height * 0.01,
             ),
             Text(
-              'To add your first water transport\nclick on the button below',
+              'Add your new flight',
               style: HomeScreenTextStyle.emptySubtitle,
             ),
             Spacer(),
-            ChosenActionButton(
-              text: 'Add Rental',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => RentalInfoScreen()),
-                );
-              },
-            ),
+            // ChosenActionButton(
+            //   text: 'Add Rental',
+            //   onTap: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (_) => FlightModelInfoScreen()),
+            //     );
+            //   },
+            // ),
             SizedBox(height: size.height * 0.035),
           ],
         ),
@@ -95,10 +101,11 @@ class FlightScreen extends StatelessWidget {
     );
   }
 
-  Widget buildRentalsList(BuildContext context, List<Rental> rentals) {
+  Widget buildFlightModelsList(
+      BuildContext context, List<FlightModel> rentals) {
     final size = MediaQuery.of(context).size;
     return Container(
-      color: AppColors.brownColor,
+      color: AppColors.greyColor,
       child: Column(
         children: [
           Expanded(
@@ -106,101 +113,12 @@ class FlightScreen extends StatelessWidget {
               itemCount: rentals.length,
               itemBuilder: (context, index) {
                 final rental = rentals[index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            TransportInfoScreen(rental: rental),
-                      ),
-                    );
-                  },
-                  child: Card(
-                    margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    color: AppColors.lightBrownColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    elevation: 5,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                rental.type,
-                                style: ConstructorTextStyle.typeName,
-                              ),
-                              Spacer(),
-                              SvgPicture.asset('assets/icons/arrow.svg'),
-                            ],
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Text(
-                                '${rental.cost.toStringAsFixed(2)}\$ ${rental.rentalPeriod.name}',
-                                style: ConstructorTextStyle.cost,
-                              ),
-                              Spacer(),
-                              Wrap(
-                                spacing: 8,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: AppColors.brownColor,
-                                    ),
-                                    child: Text(
-                                      rental.state.name,
-                                      style: _getTextStyleBasedOnRentalState(
-                                          rental.state.name),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 4),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
+                return FlightWidget(rental: rental);
               },
             ),
           ),
-          ChosenActionButton(
-            text: 'Add new transport',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => RentalInfoScreen()),
-              );
-            },
-          ),
-          SizedBox(
-            height: size.height * 0.03,
-          )
         ],
       ),
     );
-  }
-
-  TextStyle _getTextStyleBasedOnRentalState(String rentalState) {
-    switch (rentalState.toLowerCase()) {
-      case 'perfect':
-        return HomeScreenTextStyle.typePerfect;
-      case 'average':
-        return HomeScreenTextStyle.typeAverage;
-      case 'bad':
-        return HomeScreenTextStyle.typeBad;
-      default:
-        return HomeScreenTextStyle.typeAverage;
-    }
   }
 }

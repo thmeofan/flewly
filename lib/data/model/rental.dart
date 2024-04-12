@@ -1,61 +1,59 @@
-class Rental {
-  final String type;
-  final double cost;
-  final String owner;
+class FlightModel {
+  final String date;
+  final double flightNumber;
+  final double travelBudget;
+  final String destination;
   final String comment;
-  final RentalPeriod rentalPeriod;
-  final RentalState state;
+  final FlightType flightType;
 
-  Rental({
-    this.type = '',
-    this.cost = 0.0,
-    this.owner = '',
+  FlightModel({
+    this.travelBudget = 0,
+    this.date = '',
+    this.flightNumber = 0.0,
+    this.destination = '',
     this.comment = '',
-    this.rentalPeriod = RentalPeriod.monthly,
-    this.state = RentalState.average,
+    this.flightType = FlightType.vacation,
   });
 
-  Rental copyWith({
-    String? type,
-    double? cost,
-    String? owner,
+  FlightModel copyWith({
+    String? date,
+    double? flightNumber,
+    double? travelBudget,
+    String? destination,
     String? comment,
-    RentalPeriod? rentalPeriod,
-    RentalState? state,
+    FlightType? flightType,
   }) {
-    return Rental(
-      type: type ?? this.type,
-      cost: cost ?? this.cost,
-      owner: owner ?? this.owner,
+    return FlightModel(
+      date: date ?? this.date,
+      flightNumber: flightNumber ?? this.flightNumber,
+      travelBudget: travelBudget ?? this.travelBudget,
+      destination: destination ?? this.destination,
       comment: comment ?? this.comment,
-      rentalPeriod: rentalPeriod ?? this.rentalPeriod,
-      state: state ?? this.state,
+      flightType: flightType ?? this.flightType,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'type': type,
-      'cost': cost,
-      'owner': owner,
+      'date': date,
+      'flightNumber': flightNumber,
+      'travelBudget': travelBudget,
+      'destination': destination,
       'comment': comment,
-      'rentalPeriod': rentalPeriod.name,
-      'state': state.name,
+      'flightType': flightType.name,
     };
   }
 
-  factory Rental.fromJson(Map<String, dynamic> json) {
-    return Rental(
-      type: json['type'],
-      cost: (json['cost'] as num).toDouble(),
-      owner: json['owner'],
+  factory FlightModel.fromJson(Map<String, dynamic> json) {
+    return FlightModel(
+      date: json['date'],
+      flightNumber: (json['flightNumber'] as num).toDouble(),
+      travelBudget: (json['travelBudget'] as num).toDouble(),
+      destination: json['destination'],
       comment: json['comment'],
-      rentalPeriod: RentalPeriod.values.byName(json['rentalPeriod']),
-      state: RentalState.values.byName(json['state']),
+      flightType: FlightType.values.byName(json['flightType']),
     );
   }
 }
 
-enum RentalPeriod { weekly, monthly, annually }
-
-enum RentalState { perfect, average, bad }
+enum FlightType { vacation, work, other }

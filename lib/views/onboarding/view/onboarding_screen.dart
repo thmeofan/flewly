@@ -28,7 +28,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         backgroundColor: Colors.transparent,
       ),
       body: Container(
-        decoration: BoxDecoration(color: AppColors.brownColor),
+        decoration: BoxDecoration(color: AppColors.greyColor),
         child: Padding(
           padding: EdgeInsets.all(size.height * 0.02),
           child: Column(
@@ -40,7 +40,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     SizedBox(
                       height: size.height * 0.1,
                     ),
-                    SvgPicture.asset('assets/images/onboarding.svg'),
+                    SvgPicture.asset(
+                      'assets/images/onboarding.svg',
+                      height: size.height * 0.3,
+                    ),
                     SizedBox(
                       height: size.height * 0.06,
                     ),
@@ -67,7 +70,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       onTap: () {
                         Navigator.of(context).pushNamed(AppRoutes.start);
                       },
-                      text: 'Next',
+                      text: 'Continue',
                     ),
                     SizedBox(
                       height: size.height * 0.035,

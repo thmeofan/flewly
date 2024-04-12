@@ -23,7 +23,7 @@ Future<void> main() async {
   bool isFirstTime = await checkFirstLaunch();
 
   runApp(BlocProvider(
-    create: (context) => RentalCubit(SharedPreferencesService()),
+    create: (context) => FlightModelCubit(SharedPreferencesService()),
     child: FutureBuilder(
       future: fetchPrivacyPolicyLink(),
       builder: (context, snapshot) {
@@ -32,7 +32,7 @@ Future<void> main() async {
             debugShowCheckedModeBanner: false,
             home: Scaffold(
               body: Container(
-                color: AppColors.brownColor,
+                color: AppColors.greyColor,
                 child: Center(
                   child: CircularProgressIndicator(),
                 ),
