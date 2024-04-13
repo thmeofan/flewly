@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../../blocs/rental_cubit/rental_cubit.dart';
+import '../../../blocs/flight_cubit/flight_cubit.dart';
 import '../../../consts/app_colors.dart';
 import '../../../consts/app_text_styles/constructor_text_style.dart';
 import '../../../consts/app_text_styles/settings_text_style.dart';
-import '../../../data/model/rental.dart';
+import '../../../data/model/flight_model.dart';
+import '../../../util/shared_pref_service.dart';
 import '../../app/views/home_screen.dart';
 import '../../app/widgets/chosen_action_button_widget.dart';
 import '../../app/widgets/input_widget.dart';
 
 class CommentsScreen extends StatefulWidget {
+  final FlightModel flightModel;
+  CommentsScreen({required this.flightModel});
   @override
   _CommentsScreenState createState() => _CommentsScreenState();
 }
@@ -18,7 +20,15 @@ class CommentsScreen extends StatefulWidget {
 class _CommentsScreenState extends State<CommentsScreen> {
   final _budgetController = TextEditingController();
   final _commentController = TextEditingController();
-  // RentalState _rentalState = RentalState.average;
+  late SharedPrefService sharedPrefService;
+  late FlightCubit flightCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    sharedPrefService = SharedPrefService();
+    flightCubit = FlightCubit(sharedPrefService);
+  }
 
   void _clearControllers() {
     _budgetController.clear();
@@ -87,32 +97,24 @@ class _CommentsScreenState extends State<CommentsScreen> {
                       ? AppColors.blueColor.withOpacity(0.25)
                       : AppColors.blueColor,
                   onTap: () {
-                    if (_commentController.text.isNotEmpty &&
-                        _budgetController.text.isNotEmpty) {
-                      final FlightModel updatedFlightModel = FlightModel(
+                    if (_commentController.text.isNotEmpty) {
+                      FlightModel updatedFlightModel =
+                          widget.flightModel.copyWith(
+                        travelBudget: _budgetController.text.isNotEmpty
+                            ? double.parse(_budgetController.text)
+                            : 0.0,
                         comment: _commentController.text,
-                        travelBudget: double.parse(_budgetController.text),
                       );
-
-                      final rentalCubitState =
-                          context.read<FlightModelCubit>().state;
-                      final lastIndex = rentalCubitState.length - 1;
-
-                      context
-                          .read<FlightModelCubit>()
-                          .updateRentedBoatList(lastIndex, updatedFlightModel);
-                      _clearControllers();
-                      Navigator.pushReplacement(
+                      flightCubit.updateFlight(updatedFlightModel);
+                      Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => HomeScreen(),
-                        ),
+                        MaterialPageRoute(builder: (_) => HomeScreen()),
                       );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            'Please enter a comment and travel budget before continuing.',
+                            'Please enter a comment before continuing.',
                             style: ConstructorTextStyle.snackBar,
                           ),
                           duration: Duration(seconds: 2),

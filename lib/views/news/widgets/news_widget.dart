@@ -47,14 +47,14 @@ class NewsWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                height: screenSize.height * 0.01,
-              ),
+              // SizedBox(
+              //   height: screenSize.height * 0.01,
+              // ),
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.only(
-                    left: screenSize.width * 0.02,
-                    right: screenSize.width * 0.01,
+                    left: screenSize.width * 0.01,
+                    right: screenSize.width * 0.005,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,12 +67,12 @@ class NewsWidget extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(
-                        height: screenSize.height * 0.005,
+                        height: screenSize.height * 0.0025,
                       ),
                       Text(
                         newsModel.text,
                         style: NewsTextStyle.preview,
-                        maxLines: 3,
+                        maxLines: 2,
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
                       ),

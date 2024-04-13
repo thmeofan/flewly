@@ -6,7 +6,7 @@ import 'package:flewly/views/app/views/screen_new.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'blocs/rental_cubit/rental_cubit.dart';
+import 'blocs/flight_cubit/flight_cubit.dart';
 import 'consts/app_colors.dart';
 import 'data/repository/onboarding_repository.dart';
 import 'firebase_options.dart';
@@ -23,7 +23,7 @@ Future<void> main() async {
   bool isFirstTime = await checkFirstLaunch();
 
   runApp(BlocProvider(
-    create: (context) => FlightModelCubit(SharedPreferencesService()),
+    create: (context) => FlightCubit(SharedPrefService()),
     child: FutureBuilder(
       future: fetchPrivacyPolicyLink(),
       builder: (context, snapshot) {

@@ -1,5 +1,7 @@
+import 'package:intl/intl.dart';
+
 class FlightModel {
-  final String date;
+  final DateTime date;
   final double flightNumber;
   final double travelBudget;
   final String destination;
@@ -7,16 +9,16 @@ class FlightModel {
   final FlightType flightType;
 
   FlightModel({
+    required this.date,
     this.travelBudget = 0,
-    this.date = '',
     this.flightNumber = 0.0,
-    this.destination = '',
-    this.comment = '',
+    this.destination = 'empty',
+    this.comment = 'empty',
     this.flightType = FlightType.vacation,
   });
 
   FlightModel copyWith({
-    String? date,
+    DateTime? date,
     double? flightNumber,
     double? travelBudget,
     String? destination,
@@ -35,7 +37,7 @@ class FlightModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'date': date,
+      'date': DateFormat('dd.MM.yyyy').format(date),
       'flightNumber': flightNumber,
       'travelBudget': travelBudget,
       'destination': destination,
@@ -46,7 +48,7 @@ class FlightModel {
 
   factory FlightModel.fromJson(Map<String, dynamic> json) {
     return FlightModel(
-      date: json['date'],
+      date: DateFormat('dd.MM.yyyy').parse(json['date']),
       flightNumber: (json['flightNumber'] as num).toDouble(),
       travelBudget: (json['travelBudget'] as num).toDouble(),
       destination: json['destination'],

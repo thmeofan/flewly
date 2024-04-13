@@ -27,7 +27,7 @@ class OutputWidget extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 text,
-                style: ConstructorTextStyle.cost,
+                style: ConstructorTextStyle.lable,
               ),
             ),
           ),

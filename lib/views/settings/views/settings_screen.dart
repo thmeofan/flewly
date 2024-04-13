@@ -36,112 +36,115 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       body: Container(
         color: AppColors.greyColor,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                height: size.height * 0.1,
-              ),
-              Text(
-                'SETTINGS',
-                style: SettingsTextStyle.title,
-              ),
-              SizedBox(
-                height: size.height * 0.01,
-              ),
-              Container(
-                width: size.width * 0.95,
-                decoration: BoxDecoration(
-                  color: AppColors.lightGreyColor,
-                  borderRadius: BorderRadius.circular(5.0),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  height: size.height * 0.1,
                 ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: size.height * 0.005,
-                      ),
-                      Text(
-                        'Your opinion is important!',
-                        style: SettingsTextStyle.bannerTitle,
-                      ),
-                      SizedBox(
-                        height: size.height * 0.005,
-                      ),
-                      Text(
-                        'We need your feedback to get better',
-                        style: SettingsTextStyle.bannerSubTitle,
-                      ),
-                      SizedBox(
-                        height: size.height * 0.005,
-                      ),
-                      SvgPicture.asset('assets/images/settings.svg'),
-                      SizedBox(
-                        height: size.height * 0.005,
-                      ),
-                      ChosenActionButton(
-                        text: 'Rate app',
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MyScreenForVIew(
-                                  url: 'https://google.com/'),
-                            ),
-                          );
-                        },
-                      ),
-                      SizedBox(
-                        height: size.height * 0.02,
-                      ),
-                    ],
+                Text(
+                  'SETTINGS',
+                  style: SettingsTextStyle.title,
+                ),
+                SizedBox(
+                  height: size.height * 0.01,
+                ),
+                Container(
+                  width: size.width * 0.95,
+                  decoration: BoxDecoration(
+                    color: AppColors.lightGreyColor,
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: size.height * 0.005,
+                        ),
+                        Text(
+                          'Your opinion is important!',
+                          style: SettingsTextStyle.bannerTitle,
+                        ),
+                        SizedBox(
+                          height: size.height * 0.005,
+                        ),
+                        Text(
+                          'We need your feedback\nto get better',
+                          style: SettingsTextStyle.bannerSubTitle,
+                        ),
+                        SizedBox(
+                          height: size.height * 0.005,
+                        ),
+                        SvgPicture.asset('assets/images/settings.svg'),
+                        SizedBox(
+                          height: size.height * 0.005,
+                        ),
+                        ChosenActionButton(
+                          text: 'Rate app',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MyScreenForVIew(
+                                    url: 'https://google.com/'),
+                              ),
+                            );
+                          },
+                        ),
+                        SizedBox(
+                          height: size.height * 0.02,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: size.height * 0.01,
-              ),
-              SettingsTile(
-                  text: 'Privacy Policy',
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            const MyScreenForVIew(url: 'https://google.com/'),
-                      ),
-                    );
-                  },
-                  assetName: 'assets/icons/privacy.svg'),
-              SizedBox(
-                height: size.height * 0.01,
-              ),
-              SettingsTile(
-                  text: 'Notification',
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            const MyScreenForVIew(url: 'https://google.com/'),
-                      ),
-                    );
-                  },
-                  action: IOSStyleToggle(
-                    value: isSwitched,
-                    onChanged: (value) {
-                      setState(() {
-                        isSwitched = value;
-                      });
+                SizedBox(
+                  height: size.height * 0.01,
+                ),
+                SettingsTile(
+                    text: 'Privacy Policy',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const MyScreenForVIew(url: 'https://google.com/'),
+                        ),
+                      );
                     },
-                  ),
-                  assetName: 'assets/icons/notification.svg'),
-              SizedBox(
-                height: size.height * 0.01,
-              ),
-            ],
+                    assetName: 'assets/icons/privacy.svg'),
+                SizedBox(
+                  height: size.height * 0.01,
+                ),
+                SettingsTile(
+                    text: 'Notification',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const MyScreenForVIew(url: 'https://google.com/'),
+                        ),
+                      );
+                    },
+                    action: IOSStyleToggle(
+                      value: isSwitched,
+                      onChanged: (value) {
+                        setState(() {
+                          isSwitched = value;
+                        });
+                      },
+                    ),
+                    assetName: 'assets/icons/notification.svg'),
+                SizedBox(
+                  height: size.height * 0.01,
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../blocs/rental_cubit/rental_cubit.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import '../../../blocs/flight_cubit/flight_cubit.dart';
 import '../../../consts/app_colors.dart';
 import '../../../consts/app_text_styles/constructor_text_style.dart';
-import '../../../consts/app_text_styles/onboarding_text_style.dart';
+
 import '../../../consts/app_text_styles/settings_text_style.dart';
-import '../../../data/model/rental.dart';
+import '../../../data/model/flight_model.dart';
+import '../../../util/shared_pref_service.dart';
 import '../../app/widgets/chosen_action_button_widget.dart';
 import '../../app/widgets/input_widget.dart';
 import 'comments_screen.dart';
@@ -21,6 +22,15 @@ class _FlightModelInfoScreenState extends State<FlightModelInfoScreen> {
   final _destinationController = TextEditingController();
   final _flightNumberController = TextEditingController();
   FlightType _selectedFlightType = FlightType.vacation;
+  late SharedPrefService sharedPrefService;
+  late FlightCubit flightCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    sharedPrefService = SharedPrefService();
+    flightCubit = FlightCubit(sharedPrefService);
+  }
 
   void _clearControllers() {
     _dateController.clear();
@@ -74,7 +84,8 @@ class _FlightModelInfoScreenState extends State<FlightModelInfoScreen> {
                 InputWidget(
                   svgAsset: 'assets/icons/when.svg',
                   controller: _dateController,
-                  label: 'When',
+                  keyboardType: TextInputType.number,
+                  label: 'When (dd.mm.yyyy)',
                 ),
                 SizedBox(height: size.height * 0.015),
                 InputWidget(
@@ -103,28 +114,33 @@ class _FlightModelInfoScreenState extends State<FlightModelInfoScreen> {
                     if (_dateController.text.isNotEmpty &&
                         _destinationController.text.isNotEmpty &&
                         _flightNumberController.text.isNotEmpty) {
-                      final newFlight = FlightModel(
-                        date: _dateController.text,
-                        flightNumber:
-                            double.parse(_flightNumberController.text),
+                      DateTime date =
+                          DateFormat('dd.MM.yyyy').parse(_dateController.text);
+                      double flightNumber =
+                          double.parse(_flightNumberController.text);
+
+                      FlightModel newFlightModel = FlightModel(
+                        date: date,
                         destination: _destinationController.text,
-                        flightType: _selectedFlightType,
+                        flightNumber: flightNumber,
                       );
-                      context
-                          .read<FlightModelCubit>()
-                          .addFlightModel(newFlight);
-                      _clearControllers();
+
+                      flightCubit.updateFlight(newFlightModel,
+                          isNewFlight: true);
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CommentsScreen(),
+                          builder: (context) => CommentsScreen(
+                            flightModel: newFlightModel,
+                          ),
                         ),
                       );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            'Please fill in all the fields and select a rental period before continuing.',
+                            'Please enter all the information and make sure that date is in dd.mm.yyyy format',
                             style: ConstructorTextStyle.snackBar,
                           ),
                           duration: Duration(seconds: 2),
@@ -195,13 +211,12 @@ class _FlightModelInfoScreenState extends State<FlightModelInfoScreen> {
           padding: EdgeInsets.all(2.0),
           child: Row(
             children: [
-              SizedBox(width: size.width * 0.025),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     title.toUpperCase(),
-                    style: OnboardingTextStyle.description,
+                    style: ConstructorTextStyle.inputText,
                   ),
                   SizedBox(height: size.width * 0.01),
                 ],

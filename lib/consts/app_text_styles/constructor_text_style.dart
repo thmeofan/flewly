@@ -8,11 +8,17 @@ class ConstructorTextStyle {
     color: Colors.white,
     fontWeight: FontWeight.w400,
   );
+  static const TextStyle title = TextStyle(
+    fontFamily: 'Koulen',
+    fontSize: 22.0,
+    fontWeight: FontWeight.w500,
+    color: Colors.white,
+  );
   static TextStyle cost = const TextStyle(
     fontFamily: 'Koulen',
     fontSize: 16.0,
-    fontWeight: FontWeight.w200,
-    color: Colors.white,
+    fontWeight: FontWeight.w400,
+    color: AppColors.redColor,
   );
 
   static const TextStyle inputText = TextStyle(
@@ -20,11 +26,16 @@ class ConstructorTextStyle {
       fontSize: 16.0,
       fontWeight: FontWeight.w300,
       color: Colors.white);
-  static const TextStyle appBar = TextStyle(
+  static const TextStyle more = TextStyle(
+      fontFamily: 'Koulen',
+      fontSize: 13.0,
+      fontWeight: FontWeight.w300,
+      color: Colors.white);
+  static const TextStyle date = TextStyle(
       fontFamily: 'Koulen',
       fontSize: 16.0,
       fontWeight: FontWeight.w400,
-      color: AppColors.greenColor);
+      color: AppColors.blueColor);
 
   static const TextStyle lable = TextStyle(
     fontFamily: 'Koulen',

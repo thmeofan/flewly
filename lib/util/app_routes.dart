@@ -1,3 +1,5 @@
+import 'package:flewly/blocs/flight_cubit/flight_cubit.dart';
+import 'package:flewly/util/shared_pref_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,6 +17,7 @@ abstract class AppRoutes {
   static const home = 'home';
   static const welcome = 'welcome';
   static const start = 'start';
+  static const flight = 'flight';
   static const profile = 'profile';
   static const article = 'article';
   static const news = 'news';
@@ -23,6 +26,8 @@ abstract class AppRoutes {
 
     OnboardingRepository onboardingRepository = OnboardingRepository();
     OnboardingCubit onboardingCubit = OnboardingCubit(onboardingRepository);
+    SharedPrefService sharedPrefService = SharedPrefService();
+    FlightCubit flightCubit = FlightCubit(sharedPrefService);
 
     switch (settings.name) {
       case home:
@@ -30,6 +35,9 @@ abstract class AppRoutes {
       case start:
         child = BlocProvider(
             create: (context) => onboardingCubit, child: const StartScreen());
+      case flight:
+        child = BlocProvider(
+            create: (context) => flightCubit, child: const StartScreen());
       case profile:
         child = const SettingsScreen();
       case news:

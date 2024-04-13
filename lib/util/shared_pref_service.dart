@@ -1,23 +1,24 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../data/model/rental.dart';
+import '../data/model/flight_model.dart';
 
-class SharedPreferencesService {
-  static const String _rentedBoatKey = 'flights';
+class SharedPrefService {
+  static const String _flightListKey = 'flight_list';
 
-  Future<void> saveRentedBoat(List<FlightModel> rentedBoat) async {
-    final prefs = await SharedPreferences.getInstance();
-    final rentedBoatJson =
-        jsonEncode(rentedBoat.map((vm) => vm.toJson()).toList());
-    await prefs.setString(_rentedBoatKey, rentedBoatJson);
+  Future<void> saveFlightList(List<FlightModel> flightList) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> flightJsonList =
+        flightList.map((flight) => json.encode(flight.toJson())).toList();
+    await prefs.setStringList(_flightListKey, flightJsonList);
   }
 
-  Future<List<FlightModel>> getRentedBoat() async {
-    final prefs = await SharedPreferences.getInstance();
-    final rentedBoatJson = prefs.getString(_rentedBoatKey);
-    if (rentedBoatJson != null) {
-      final List<dynamic> rentedBoatList = jsonDecode(rentedBoatJson);
-      return rentedBoatList.map((json) => FlightModel.fromJson(json)).toList();
+  Future<List<FlightModel>> getFlightList() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? flightJsonList = prefs.getStringList(_flightListKey);
+    if (flightJsonList != null) {
+      return flightJsonList
+          .map((jsonString) => FlightModel.fromJson(json.decode(jsonString)))
+          .toList();
     }
     return [];
   }
